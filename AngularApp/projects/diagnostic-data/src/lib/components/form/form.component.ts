@@ -49,6 +49,14 @@ export class FormComponent extends DataRenderBaseComponent {
     return inputType === InputType.Button;
   }
 
+  public isRadioButtonList(inputType: InputType, formInput: FormInput) {
+    if (inputType === InputType.RadioButton) {
+      console.log("From RadioButton list" + JSON.stringify(formInput));
+    }
+
+    return inputType === InputType.RadioButton;
+  }
+
   // parses the incoming data to render a form
   private parseData(data: DataTableResponseObject) {
     let totalForms = data.rows.length;
@@ -69,12 +77,19 @@ export class FormComponent extends DataRenderBaseComponent {
               formInputs[ip]["buttonStyle"]
             ));
           } else {
-            this.detectorForms[i].formInputs.push(new FormInput(
+            
+            var f = new FormInput(
               `${this.detectorForms[i].formId}.${formInputs[ip]["inputId"]}`,
               formInputs[ip]["inputId"],
               formInputs[ip]["inputType"],
               formInputs[ip]["label"],
-              formInputs[ip]["isRequired"]));
+              formInputs[ip]["isRequired"],
+              formInputs[ip]["items"]);
+            
+              if (formInputs[ip]["inputType"] === InputType.RadioButton) {
+                console.log("items = " + JSON.stringify(f));
+              }
+            this.detectorForms[i].formInputs.push(f);
           }
         }
       }
@@ -95,7 +110,7 @@ export class FormComponent extends DataRenderBaseComponent {
       formToExecute.errorMessage = '';
       let queryParams = `&fId=${formId}&btnId=${buttonId}`;
       formToExecute.formInputs.forEach(ip => {
-        queryParams += `&inpId=${ip.inputId}&val=${ip.inputValue}`;
+        queryParams += `&inpId=${ip.inputId}&val=${ip.inputValue}&inpType=${ip.inputType}`;
       });
       // Send telemetry event for Form Button click
       this.logFormButtonClick(formToExecute.formTitle);
@@ -106,11 +121,11 @@ export class FormComponent extends DataRenderBaseComponent {
         };
         this._diagnosticService.getCompilerResponse(body, false, '', this.detectorControlService.startTimeString,
           this.detectorControlService.endTimeString, '', '', {
-            formQueryParams: queryParams,
-            scriptETag: this.compilationPackage.scriptETag,
-            assemblyName: this.compilationPackage.assemblyName,
-            getFullResponse: true
-          })
+          formQueryParams: queryParams,
+          scriptETag: this.compilationPackage.scriptETag,
+          assemblyName: this.compilationPackage.assemblyName,
+          getFullResponse: true
+        })
           .subscribe((response: any) => {
             formToExecute.loadingFormResponse = false;
             if (response.body != undefined) {
@@ -136,7 +151,8 @@ export class FormComponent extends DataRenderBaseComponent {
         formToExecute.formInputs.forEach(ip => {
           detectorParams.inputs.push({
             'inpId': ip.inputId,
-            'val': ip.inputValue
+            'val': ip.inputValue,
+            'inpType': ip.inputType
           });
         });
         let detectorQueryParamsString = JSON.stringify(detectorParams);
@@ -158,6 +174,7 @@ export class FormComponent extends DataRenderBaseComponent {
       detectorQueryParams.inputs.forEach(ip => {
         let inputElement = formToSetValues.formInputs.find(input => input.inputId == ip.inpId);
         inputElement.inputValue = ip.val;
+        inputElement.inputType = ip.inputType;
       });
     }
   }
@@ -168,7 +185,7 @@ export class FormComponent extends DataRenderBaseComponent {
       let formToExecute = this.detectorForms.find(form => form.formId == detectorQueryParams.fId);
       let queryParams = `&fId=${detectorQueryParams.fId}&btnId=${detectorQueryParams.btnId}`;
       detectorQueryParams.inputs.forEach(ip => {
-        queryParams += `&inpId=${ip.inpId}&val=${ip.val}`;
+        queryParams += `&inpId=${ip.inpId}&val=${ip.val}&inpType=${ip.inputType}`;
       });
       // Setting loading indicator and removing the existing form response from the ui
       formToExecute.loadingFormResponse = true;
