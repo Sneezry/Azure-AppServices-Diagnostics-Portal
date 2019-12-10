@@ -77,7 +77,7 @@ export class FormComponent extends DataRenderBaseComponent {
               formInputs[ip]["buttonStyle"]
             ));
           } else {
-            
+
             var f = new FormInput(
               `${this.detectorForms[i].formId}.${formInputs[ip]["inputId"]}`,
               formInputs[ip]["inputId"],
@@ -85,7 +85,7 @@ export class FormComponent extends DataRenderBaseComponent {
               formInputs[ip]["label"],
               formInputs[ip]["isRequired"],
               formInputs[ip]["items"]);
-            
+
               if (formInputs[ip]["inputType"] === InputType.RadioButton) {
                 console.log("items = " + JSON.stringify(f));
               }
@@ -174,7 +174,7 @@ export class FormComponent extends DataRenderBaseComponent {
       detectorQueryParams.inputs.forEach(ip => {
         let inputElement = formToSetValues.formInputs.find(input => input.inputId == ip.inpId);
         inputElement.inputValue = ip.val;
-        inputElement.inputType = ip.inputType;
+        inputElement.inputType = ip.inpType;
       });
     }
   }
@@ -185,7 +185,7 @@ export class FormComponent extends DataRenderBaseComponent {
       let formToExecute = this.detectorForms.find(form => form.formId == detectorQueryParams.fId);
       let queryParams = `&fId=${detectorQueryParams.fId}&btnId=${detectorQueryParams.btnId}`;
       detectorQueryParams.inputs.forEach(ip => {
-        queryParams += `&inpId=${ip.inpId}&val=${ip.val}&inpType=${ip.inputType}`;
+        queryParams += `&inpId=${ip.inpId}&val=${ip.val}&inpType=${ip.inpType}`;
       });
       // Setting loading indicator and removing the existing form response from the ui
       formToExecute.loadingFormResponse = true;
