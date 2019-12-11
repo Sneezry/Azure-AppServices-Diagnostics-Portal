@@ -19,18 +19,13 @@ export class FormInput {
     displayValidation: boolean = false;
     items: ListItem[] = [];
 
-    constructor(internalId: string, id: number, inputType: InputType, label: string, isRequired: boolean, _items: ListItem[]) {
+    constructor(internalId: string, id: number, inputType: InputType, label: string, isRequired: boolean, items: ListItem[]) {
         this.internalId = internalId;
         this.inputId = id;
         this.inputType = inputType;
         this.inputLabel = label;
         this.isRequired = isRequired;
-        this.items = [];
-        if (_items != null) {
-            for (let index = 0; index < _items.length; index++) {
-                this.items.push(_items[index]);
-            }
-        }
+        this.items = items;
 
     }
 }
@@ -44,8 +39,13 @@ export class FormButton extends FormInput {
 }
 
 export class RadioButtonList extends FormInput {
-    constructor(internalId: string, id: number, inputType: InputType, label: string, isRequired: boolean, items: ListItem[]) {
-        super(internalId, id, inputType, label, isRequired, items);
+    constructor(internalId: string, id: number, inputType: InputType, label: string, items: ListItem[]) {
+        super(internalId, id, inputType, label, false, items);
+        items.forEach(x=>{
+            if (x.isSelected){
+                this.inputValue = x.value;
+            }
+        })
     }
 }
 

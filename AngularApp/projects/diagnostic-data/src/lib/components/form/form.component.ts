@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { DataRenderBaseComponent } from '../data-render-base/data-render-base.component';
 import { DiagnosticData, Rendering, DataTableResponseObject, DetectorResponse } from '../../models/detector';
-import { Form, FormInput, InputType, FormButton, ButtonStyles } from '../../models/form';
+import { Form, FormInput, InputType, FormButton, ButtonStyles, RadioButtonList } from '../../models/form';
 import { DiagnosticService } from '../../services/diagnostic.service';
 import { DetectorControlService } from '../../services/detector-control.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -49,11 +49,7 @@ export class FormComponent extends DataRenderBaseComponent {
     return inputType === InputType.Button;
   }
 
-  public isRadioButtonList(inputType: InputType, formInput: FormInput) {
-    if (inputType === InputType.RadioButton) {
-      console.log("From RadioButton list" + JSON.stringify(formInput));
-    }
-
+  public isRadioButtonList(inputType: InputType) {
     return inputType === InputType.RadioButton;
   }
 
@@ -76,20 +72,23 @@ export class FormComponent extends DataRenderBaseComponent {
               formInputs[ip]["isRequired"],
               formInputs[ip]["buttonStyle"]
             ));
-          } else {
-
-            var f = new FormInput(
+          }
+          else if (formInputs[ip]["inputType"] === InputType.RadioButton) {
+            this.detectorForms[i].formInputs.push(new RadioButtonList(
+              `${this.detectorForms[i].formId}.${formInputs[ip]["inputId"]}`,
+              formInputs[ip]["inputId"],
+              formInputs[ip]["inputType"],
+              formInputs[ip]["label"],
+              formInputs[ip]["items"]));
+          }
+          else {
+            this.detectorForms[i].formInputs.push(new FormInput(
               `${this.detectorForms[i].formId}.${formInputs[ip]["inputId"]}`,
               formInputs[ip]["inputId"],
               formInputs[ip]["inputType"],
               formInputs[ip]["label"],
               formInputs[ip]["isRequired"],
-              formInputs[ip]["items"]);
-
-              if (formInputs[ip]["inputType"] === InputType.RadioButton) {
-                console.log("items = " + JSON.stringify(f));
-              }
-            this.detectorForms[i].formInputs.push(f);
+              formInputs[ip]["items"]));
           }
         }
       }

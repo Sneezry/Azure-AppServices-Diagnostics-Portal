@@ -15,13 +15,13 @@
 
         </div>
       </div>
-      <div class="form-group row" *ngIf="isRadioButtonList(formInput.inputType, formInput)">
+      <div class="form-group row" *ngIf="isRadioButtonList(formInput.inputType)">
         <div class="col-sm-8">
           <label class="col-sm-4 col-md-2 col-form-label"> {{formInput.inputLabel}} </label>
           <div class="col-sm-8 col-md-6">
             <ng-container *ngFor="let entry of formInput.items">
               <div class="radio">
-                <label><input type="radio" name="radiogroup" [id]=formInput.internalId [checked]="entry.isSelected" [(ngModel)]="formInput.inputValue"
+                <label><input type="radio" [name]=formInput.internalId [(ngModel)]="formInput.inputValue"
                     [value]="entry.value">{{ entry.text }}</label>
               </div>
             </ng-container>
