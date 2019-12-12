@@ -87,8 +87,7 @@ export class FormComponent extends DataRenderBaseComponent {
               formInputs[ip]["inputId"],
               formInputs[ip]["inputType"],
               formInputs[ip]["label"],
-              formInputs[ip]["isRequired"],
-              formInputs[ip]["items"]));
+              formInputs[ip]["isRequired"]));
           }
         }
       }
