@@ -166,7 +166,7 @@ export class CpuMonitoringConfigurationComponent implements OnInit, OnChanges {
     this.ruleSummary += ` Monitoring will stop automatically after <b>${this.monitoringSession.MaximumNumberOfHours > 24 ? (this.getValueRounded(this.monitoringSession.MaximumNumberOfHours / 24)) + " days" : this.monitoringSession.MaximumNumberOfHours + " hours"}</b>.`;
 
     if (this.monitoringSession.MonitorScmProcesses){
-      this.ruleSummary += " The worker process for the kudu site and all the webjobs under this app will also be monitored."
+      this.ruleSummary += " The worker process for the kudu site and the webjobs under this app will also be monitored."
     }
   }
 
