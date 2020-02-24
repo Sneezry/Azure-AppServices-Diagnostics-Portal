@@ -19,7 +19,7 @@
 			"description": "",
 			"keywords": [],
 			"color": "",
-			"createFlowForCategory": true,
+			"createFlowForCategory": false,
 			"overridePath": "",
 			"chatEnabled": false
 		}
